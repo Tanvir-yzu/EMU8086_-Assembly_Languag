@@ -1,35 +1,93 @@
 ORG 100h
 
-; Input first number
+START:
+
+; Show menu
+MOV DX, OFFSET MENU
+MOV AH, 09h
+INT 21h
+
+; Take choice
 MOV AH, 01h
 INT 21h
-SUB AL, 30h      ; convert ASCII to number
 MOV BL, AL
 
 ; New line
+CALL NEWLINE
+
+; Input first number
+MOV DX, OFFSET MSG1
+CALL PRINT
+CALL INPUT
+MOV BH, AL
+
+; New line
+CALL NEWLINE
+
+; Input second number
+MOV DX, OFFSET MSG2
+CALL PRINT
+CALL INPUT
+MOV CL, AL
+
+; Perform operation
+CMP BL, '1'
+JE ADDITION
+
+CMP BL, '2'
+JE SUBTRACTION
+
+JMP END
+
+ADDITION:
+MOV AL, BH
+ADD AL, CL
+JMP SHOW
+
+SUBTRACTION:
+MOV AL, BH
+SUB AL, CL
+JMP SHOW
+
+SHOW:
+ADD AL, 30h
+MOV DL, AL
+MOV AH, 02h
+INT 21h
+
+JMP END
+
+; -------- FUNCTIONS --------
+
+PRINT:
+MOV AH, 09h
+INT 21h
+RET
+
+INPUT:
+MOV AH, 01h
+INT 21h
+SUB AL, 30h
+RET
+
+NEWLINE:
 MOV AH, 02h
 MOV DL, 0DH
 INT 21h
 MOV DL, 0AH
 INT 21h
-
-; Input second number
-MOV AH, 01h
-INT 21h
-SUB AL, 30h
-ADD AL, BL       ; add numbers
-
-; Convert result to ASCII
-ADD AL, 30h
-
-; Print result
-MOV DL, AL
-MOV AH, 02h
-INT 21h
-
 RET
 
+END:
+RET
+
+; -------- DATA --------
+
+MENU DB '1.Add  2.Subtract $'
+MSG1 DB 'Enter first number: $'
+MSG2 DB 'Enter second number: $'
 
 
 
-; [SOURCE]: D:\Programming\Assembler\mycode.asm
+
+; [SOURCE]: D:\Programming\Assembler\calculator\mycode.asm

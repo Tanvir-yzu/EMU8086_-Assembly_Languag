@@ -2,7 +2,7 @@ EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
  
 mycode.com -- emu8086 assembler version: 4.08  
  
-[ 4/1/2026  --  6:07:59 PM ] 
+[ 4/1/2026  --  6:26:17 PM ] 
  
 ===================================================================================================
 [LINE]     LOC: MACHINE CODE                          SOURCE
@@ -10,36 +10,97 @@ mycode.com -- emu8086 assembler version: 4.08
  
 [   1]        :                                       ORG 100h
 [   2]        :                                       
-[   3]        :                                       ; Input first number
-[   4]    0100: B4 01                                 MOV AH, 01h
-[   5]    0102: CD 21                                 INT 21h
-[   6]    0104: 2C 30                                 SUB AL, 30h      ; convert ASCII to number
-[   7]    0106: 8A D8                                 MOV BL, AL
-[   8]        :                                       
-[   9]        :                                       ; New line
-[  10]    0108: B4 02                                 MOV AH, 02h
-[  11]    010A: B2 0D                                 MOV DL, 0DH
-[  12]    010C: CD 21                                 INT 21h
-[  13]    010E: B2 0A                                 MOV DL, 0AH
-[  14]    0110: CD 21                                 INT 21h
-[  15]        :                                       
-[  16]        :                                       ; Input second number
-[  17]    0112: B4 01                                 MOV AH, 01h
-[  18]    0114: CD 21                                 INT 21h
-[  19]    0116: 2C 30                                 SUB AL, 30h
-[  20]    0118: 02 C3                                 ADD AL, BL       ; add numbers
-[  21]        :                                       
-[  22]        :                                       ; Convert result to ASCII
-[  23]    011A: 04 30                                 ADD AL, 30h
-[  24]        :                                       
-[  25]        :                                       ; Print result
-[  26]    011C: 8A D0                                 MOV DL, AL
-[  27]    011E: B4 02                                 MOV AH, 02h
-[  28]    0120: CD 21                                 INT 21h
-[  29]        :                                       
-[  30]    0122: C3                                    RET
-[  31]        :                                       
+[   3]    0100:                                       START:
+[   4]        :                                       
+[   5]        :                                       ; Show menu
+[   6]    0100: BA 63 01                              MOV DX, OFFSET MENU
+[   7]    0103: B4 09                                 MOV AH, 09h
+[   8]    0105: CD 21                                 INT 21h
+[   9]        :                                       
+[  10]        :                                       ; Take choice
+[  11]    0107: B4 01                                 MOV AH, 01h
+[  12]    0109: CD 21                                 INT 21h
+[  13]    010B: 8A D8                                 MOV BL, AL
+[  14]        :                                       
+[  15]        :                                       ; New line
+[  16]    010D: E8 47 00                              CALL NEWLINE
+[  17]        :                                       
+[  18]        :                                       ; Input first number
+[  19]    0110: BA 76 01                              MOV DX, OFFSET MSG1
+[  20]    0113: E8 35 00                              CALL PRINT
+[  21]    0116: E8 37 00                              CALL INPUT
+[  22]    0119: 8A F8                                 MOV BH, AL
+[  23]        :                                       
+[  24]        :                                       ; New line
+[  25]    011B: E8 39 00                              CALL NEWLINE
+[  26]        :                                       
+[  27]        :                                       ; Input second number
+[  28]    011E: BA 8B 01                              MOV DX, OFFSET MSG2
+[  29]    0121: E8 27 00                              CALL PRINT
+[  30]    0124: E8 29 00                              CALL INPUT
+[  31]    0127: 8A C8                                 MOV CL, AL
 [  32]        :                                       
+[  33]        :                                       ; Perform operation
+[  34]    0129: 80 FB 31                              CMP BL, '1'
+[  35]    012C: 74 07                                 JE ADDITION
+[  36]        :                                       
+[  37]    012E: 80 FB 32                              CMP BL, '2'
+[  38]    0131: 74 08                                 JE SUBTRACTION
+[  39]        :                                       
+[  40]    0133: EB 2D                                 JMP END
+[  41]        :                                       
+[  42]    0135:                                       ADDITION:
+[  43]    0135: 8A C7                                 MOV AL, BH
+[  44]    0137: 02 C1                                 ADD AL, CL
+[  45]    0139: EB 06                                 JMP SHOW
+[  46]        :                                       
+[  47]    013B:                                       SUBTRACTION:
+[  48]    013B: 8A C7                                 MOV AL, BH
+[  49]    013D: 2A C1                                 SUB AL, CL
+[  50]    013F: EB 00                                 JMP SHOW
+[  51]        :                                       
+[  52]    0141:                                       SHOW:
+[  53]    0141: 04 30                                 ADD AL, 30h
+[  54]    0143: 8A D0                                 MOV DL, AL
+[  55]    0145: B4 02                                 MOV AH, 02h
+[  56]    0147: CD 21                                 INT 21h
+[  57]        :                                       
+[  58]    0149: EB 17                                 JMP END
+[  59]        :                                       
+[  60]        :                                       ; -------- FUNCTIONS --------
+[  61]        :                                       
+[  62]    014B:                                       PRINT:
+[  63]    014B: B4 09                                 MOV AH, 09h
+[  64]    014D: CD 21                                 INT 21h
+[  65]    014F: C3                                    RET
+[  66]        :                                       
+[  67]    0150:                                       INPUT:
+[  68]    0150: B4 01                                 MOV AH, 01h
+[  69]    0152: CD 21                                 INT 21h
+[  70]    0154: 2C 30                                 SUB AL, 30h
+[  71]    0156: C3                                    RET
+[  72]        :                                       
+[  73]    0157:                                       NEWLINE:
+[  74]    0157: B4 02                                 MOV AH, 02h
+[  75]    0159: B2 0D                                 MOV DL, 0DH
+[  76]    015B: CD 21                                 INT 21h
+[  77]    015D: B2 0A                                 MOV DL, 0AH
+[  78]    015F: CD 21                                 INT 21h
+[  79]    0161: C3                                    RET
+[  80]        :                                       
+[  81]    0162:                                       END:
+[  82]    0162: C3                                    RET
+[  83]        :                                       
+[  84]        :                                       ; -------- DATA --------
+[  85]        :                                       
+[  86]    0163: 31 2E 41 64 64 20 20 32 2E 53 75 62   MENU DB '1.Add  2.Subtract $'
+                74 72 61 63 74 20 24                
+[  87]    0176: 45 6E 74 65 72 20 66 69 72 73 74 20   MSG1 DB 'Enter first number: $'
+                6E 75 6D 62 65 72 3A 20 24          
+[  88]    018B: 45 6E 74 65 72 20 73 65 63 6F 6E 64   MSG2 DB 'Enter second number: $'
+                20 6E 75 6D 62 65 72 3A 20 24       
+[  89]        :                                       
+[  90]        :                                       
  
 ===================================================================================================
  

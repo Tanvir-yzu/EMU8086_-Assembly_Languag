@@ -2,7 +2,18 @@
 ===================================================================================================
 Name                     	Offset    	Size      	Type      	Segment   
 ===================================================================================================
+START                    	00100     	-1        	LABEL     	(NOSEG)   
+ADDITION                 	00135     	-1        	LABEL     	(NOSEG)   
+SUBTRACTION              	0013B     	-1        	LABEL     	(NOSEG)   
+SHOW                     	00141     	-1        	LABEL     	(NOSEG)   
+PRINT                    	0014B     	-1        	LABEL     	(NOSEG)   
+INPUT                    	00150     	-1        	LABEL     	(NOSEG)   
+NEWLINE                  	00157     	-1        	LABEL     	(NOSEG)   
+END                      	00162     	-1        	LABEL     	(NOSEG)   
+MENU                     	00163     	1         	VAR       	(NOSEG)   
+MSG1                     	00176     	1         	VAR       	(NOSEG)   
+MSG2                     	0018B     	1         	VAR       	(NOSEG)   
 ===================================================================================================
-[ 4/1/2026  --  6:07:59 PM ] 
+[ 4/1/2026  --  6:26:17 PM ] 
 < END >
  
