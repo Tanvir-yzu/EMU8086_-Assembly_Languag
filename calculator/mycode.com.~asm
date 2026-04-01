@@ -1,0 +1,35 @@
+ORG 100h
+
+; Input first number
+MOV AH, 01h
+INT 21h
+SUB AL, 30h      ; convert ASCII to number
+MOV BL, AL
+
+; New line
+MOV AH, 02h
+MOV DL, 0DH
+INT 21h
+MOV DL, 0AH
+INT 21h
+
+; Input second number
+MOV AH, 01h
+INT 21h
+SUB AL, 30h
+ADD AL, BL       ; add numbers
+
+; Convert result to ASCII
+ADD AL, 30h
+
+; Print result
+MOV DL, AL
+MOV AH, 02h
+INT 21h
+
+RET
+
+
+
+
+; [SOURCE]: D:\Programming\Assembler\mycode.asm
